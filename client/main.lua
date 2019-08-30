@@ -20,7 +20,7 @@ end)
 Citizens.CreateThread(function ()
 
     while true do
-        Citizens.Wait(300)
+        Citizens.Wait(0)
 
         local currentPed = PlayerPedId()
         local currentPos = GetEntityCoords(currentPed)
