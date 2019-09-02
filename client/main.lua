@@ -4,12 +4,18 @@
 
 ESX = nil
 local currentAdminPlayers = {}
+local owned = false
 
 Citizen.CreateThread(function()
     while ESX == nil do
         TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
         Citizen.Wait(0)
     end
+end)
+
+RegisterNetEvent('relisoft_tag:owned')
+AddEventHandler('relisoft_tag:owned',function(owned)
+    owned = false
 end)
 
 RegisterNetEvent('relisoft_tag:set_admins')
@@ -29,9 +35,14 @@ Citizens.CreateThread(function ()
 
             local adminPed = GetPlayerPed(v.source)
             local adminCoords = GetEntityCoords(adminPed)
+            local {x,y,z} = table.unpack(adminCoords)
+            z = z + 1
             local distance = GetDistanceBetweenCoords(currentPos, adminCoords)
             if distance < Config.SeeDistance then
-                ESX.Game.Utils.DrawText3D(adminCoords, "ADMIN", 2)
+                ESX.Game.Utils.DrawText3D({x,y,z}, "ADMIN", 2)
+            end
+            if owned then
+                ESX.Game.Utils.DrawText3D({x,y,z}, "ADMIN", 2)
             end
         end
     end
