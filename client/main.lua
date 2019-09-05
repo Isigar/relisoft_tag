@@ -36,7 +36,8 @@ Citizens.CreateThread(function ()
             local adminCoords = GetEntityCoords(adminPed)
             local x,y,z = unpack(adminCoords)
             z = z + 1
-            local distance = GetDistanceBetweenCoords(currentPos, {x,y,z})
+            
+            local distance = GetDistanceBetweenCoords(currentPos, {x,y,z}, true)
 
             local label = Config.Labels[xPlayer.getGroup()]
             if label then
