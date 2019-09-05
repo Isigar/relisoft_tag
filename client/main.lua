@@ -32,17 +32,20 @@ Citizens.CreateThread(function ()
         local currentPos = GetEntityCoords(currentPed)
 
         for i, v in pairs(currentAdminPlayers) do
-
             local adminPed = GetPlayerPed(v.source)
             local adminCoords = GetEntityCoords(adminPed)
-            local {x,y,z} = table.unpack(adminCoords)
+            local x,y,z = unpack(adminCoords)
             z = z + 1
             local distance = GetDistanceBetweenCoords(currentPos, adminCoords)
-            if distance < Config.SeeDistance then
-                ESX.Game.Utils.DrawText3D({x,y,z}, "ADMIN", 2)
-            end
-            if owned then
-                ESX.Game.Utils.DrawText3D({x,y,z}, "ADMIN", 2)
+
+            local label = Config.Labels[xPlayer.getGroup()]
+            if label then
+                if distance < Config.SeeDistance then
+                    ESX.Game.Utils.DrawText3D({x,y,z}, label, 2)
+                end
+                if owned then
+                    ESX.Game.Utils.DrawText3D({x,y,z}, label, 2)
+                end
             end
         end
     end
