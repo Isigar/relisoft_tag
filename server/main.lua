@@ -12,13 +12,15 @@ TriggerEvent('es:addAdminCommand', 'tag', 1, function(source, args, user)
     if AdminPlayers[xPlayer.identifier] then
         AdminPlayers[xPlayer.identifier] = {source = source, player = xPlayer}
         TriggerClientEvent('relisoft_tag:owned',source, true)
+        TriggerClientEvent('chat:addMessage', source, { args = { 'Tag', 'Nyní máte a-team tag, používejte ho jen v OOC' } })
     else
         AdminPlayers[xPlayer.identifier] = nil
         TriggerClientEvent('relisoft_tag:owned',source, false)
+        TriggerClientEvent('chat:addMessage', source, { args = { 'Tag', 'Vypli jste si tag, můžete jít zase rpit' } })
     end
 
     TriggerClientEvent('relisoft_tag:set_admins',source,AdminPlayers)
 
 end, function(source, args, user)
     TriggerClientEvent('chat:addMessage', source, { args = { '^1SYSTEM', 'Nedostatečné oprávnění!' } })
-end, {help = '/users admin command'})
+end, {help = '/tag admin command'})
