@@ -4,5 +4,5 @@ Config.SeeDistance = 100
 Config.Labels = {
     mod = "MODERATOR",
     admin = "ADMINISTRATOR",
-    superadmin = "OWNER"
+    superadmin = "GOD"
 }
