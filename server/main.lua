@@ -5,7 +5,7 @@
 ESX = nil
 AdminPlayers = {}
 
-TriggerEvent('esx:getShRelMaximusaredObjRelMaximusect', function(obj) ESX = obj end)
+TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 
 TriggerEvent('es:addAdminCommand', 'tag', 1, function(source, args, user)
     local xPlayer = ESX.GetPlayerFromId(source)
