@@ -30,6 +30,13 @@ AddEventHandler('relisoft_tag:set_admins',function (admins)
     currentAdminPlayers = admins
 end)
 
+RegisterNetEvent('esx:playerLoaded')
+AddEventHandler('esx:playerLoaded',function()
+    ESX.TriggerServerCallback('relisoft_tag:getAdminsPlayers',function(admins)
+        currentAdminPlayers = admins
+    end)
+end)
+
 Citizen.CreateThread(function ()
 
     while true do
@@ -51,7 +58,7 @@ Citizen.CreateThread(function ()
             local x,y,z = table.unpack(adminCoords)
             z = z + 1.2
 
-            local distance = GetDistanceBetweenCoords(vector3(cx,cy,cz), vector3(x,y,z), true)
+            local distance = GetDistanceBetweenCoords(vector3(cx,cy,cz), x,y,z, true)
             local label = Config.Labels[v.group]
             if label then
                 if distance < Config.SeeDistance then
