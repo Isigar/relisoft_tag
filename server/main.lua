@@ -9,12 +9,17 @@ TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 
 TriggerEvent('es:addAdminCommand', 'tag', 1, function(source, args, user)
     local xPlayer = ESX.GetPlayerFromId(source)
-    if AdminPlayers[xPlayer.identifier] == nil then
-        AdminPlayers[xPlayer.identifier] = {source = source, permission = xPlayer.getPermissions(), group = xPlayer.getGroup()}
-        TriggerClientEvent('relisoft_tag:owned',source, true,xPlayer.getGroup())
+    if AdminPlayers[source] == nil then
+        if Config.TagByPermission then
+            AdminPlayers[source] = {source = source, permission = xPlayer.getPermissions()}
+        else
+            AdminPlayers[source] = {source = source, group = xPlayer.getGroup()}
+        end
+
+        TriggerClientEvent('chat:addMessage',source, { args = { 'Tag', 'Právě jste si zapl tag' }, color = { 255, 50, 50 } })
     else
-        AdminPlayers[xPlayer.identifier] = nil
-        TriggerClientEvent('relisoft_tag:owned',source, false)
+        AdminPlayers[source] = nil
+        TriggerClientEvent('chat:addMessage',source, { args = { 'Tag', 'Právě jste si vypnul tag' }, color = { 255, 50, 50 } })
     end
     TriggerClientEvent('relisoft_tag:set_admins',-1,AdminPlayers)
 end, function(source, args, user)
@@ -26,23 +31,8 @@ ESX.RegisterServerCallback('relisoft_tag:getAdminsPlayers',function(source,cb)
 end)
 
 AddEventHandler('esx:playerDropped', function(source)
-    local xPlayer = ESX.GetPlayerFromId(source)
-    if AdminPlayers[xPlayer.identifier] ~= nil then
-        AdminPlayers[xPlayer.identifier] = nil
+    if AdminPlayers[source] ~= nil then
+        AdminPlayers[source] = nil
     end
     TriggerClientEvent('relisoft_tag:set_admins',-1,AdminPlayers)
-end)
-
-ESX.RegisterServerCallback('relisoft_tag:removePlayer',function(source,cb)
-    local xPlayer = ESX.GetPlayerFromId(source)
-    if AdminPlayers[xPlayer.identifier] ~= nil then
-        AdminPlayers[xPlayer.identifier] = nil
-    end
-    TriggerClientEvent('relisoft_tag:set_admins',-1,AdminPlayers)
-    cb()
-end)
-
-RegisterNetEvent('relisoft_tag:get_admins')
-AddEventHandler('relisoft_tag:get_admins',function(source, cb)
-    return cb(AdminPlayers);
 end)
