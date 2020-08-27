@@ -1,4 +1,4 @@
--- relisoft.cz
+-- rcore.cz
 -- Some-RP.cz
 -- forum.some-rp.cz
 
