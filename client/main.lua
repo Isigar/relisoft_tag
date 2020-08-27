@@ -16,6 +16,11 @@ end)
 RegisterNetEvent('relisoft_tag:set_admins')
 AddEventHandler('relisoft_tag:set_admins',function (admins)
     currentAdminPlayers = admins
+    for id,admin in pairs(visibleAdmins) do
+        if admins[id] == nil then
+            visibleAdmins[id] = nil
+        end
+    end
 end)
 
 RegisterNetEvent('esx:playerLoaded')
