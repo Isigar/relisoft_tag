@@ -7,7 +7,7 @@ AdminPlayers = {}
 
 TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 
-TriggerEvent('es:addAdminCommand', 'tag', 1, function(source, args, user)
+RegisterCommand('tag', function(source,args)
     local xPlayer = ESX.GetPlayerFromId(source)
     if AdminPlayers[source] == nil then
         if Config.TagByPermission then
@@ -22,9 +22,7 @@ TriggerEvent('es:addAdminCommand', 'tag', 1, function(source, args, user)
         TriggerClientEvent('chat:addMessage',source, { args = { 'Tag', 'Právě jste si vypnul tag' }, color = { 255, 50, 50 } })
     end
     TriggerClientEvent('relisoft_tag:set_admins',-1,AdminPlayers)
-end, function(source, args, user)
-    TriggerClientEvent('chat:addMessage', source, { args = { '^1SYSTEM', 'Nedostatečné oprávnění!' } })
-end, {help = '/tag admin command'})
+end)
 
 ESX.RegisterServerCallback('relisoft_tag:getAdminsPlayers',function(source,cb)
     cb(AdminPlayers)
