@@ -1,7 +1,6 @@
 Config = {}
 Config.SeeOwnLabel = true
 Config.SeeDistance = 100
-Config.SeeDistanceTolerance = 20
 Config.TextSize = 1.5
 Config.ZOffset = 1.2
 Config.NearCheckWait = 500
