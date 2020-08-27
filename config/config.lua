@@ -2,7 +2,6 @@ Config = {}
 Config.SeeOwnLabel = true
 Config.SeeDistance = 100
 Config.TextSize = 0.8
-Config.TextScale = 0.1
 Config.ZOffset = 1.2
 Config.NearCheckWait = 500
 Config.TagByPermission = false --Using xPlayer.getPermissions() which is deprecated method for old ESX
