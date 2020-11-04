@@ -79,29 +79,32 @@ Citizen.CreateThread(function ()
         Citizen.Wait(0)
 
         for k, v in pairs(visibleAdmins) do
-            local adminPed = GetPlayerPed(GetPlayerFromServerId(v.source))
-            local adminCoords = GetEntityCoords(adminPed)
-            local x,y,z = table.unpack(adminCoords)
-            z = z + Config.ZOffset
+            local serverPed = GetPlayerFromServerId(v.source)
+            if serverPed ~= -1 then
+                local adminPed = GetPlayerPed(serverPed)
+                local adminCoords = GetEntityCoords(adminPed)
+                local x,y,z = table.unpack(adminCoords)
+                z = z + Config.ZOffset
 
-            local label
-            if Config.TagByPermission then
-                label = Config.PermissionLabels[v.permission]
-            else
-                label = Config.GroupLabels[v.group]
-            end
+                local label
+                if Config.TagByPermission then
+                    label = Config.PermissionLabels[v.permission]
+                else
+                    label = Config.GroupLabels[v.group]
+                end
 
-            if label then
-                if v.source == GetPlayerServerId(PlayerId()) then
-                    if Config.SeeOwnLabel == true then
+                if label then
+                    if v.source == GetPlayerServerId(PlayerId()) then
+                        if Config.SeeOwnLabel == true then
+                            draw3DText(vector3(x,y,z), label, {
+                                size = Config.TextSize
+                            })
+                        end
+                    else
                         draw3DText(vector3(x,y,z), label, {
                             size = Config.TextSize
                         })
                     end
-                else
-                    draw3DText(vector3(x,y,z), label, {
-                        size = Config.TextSize
-                    })
                 end
             end
         end
