@@ -61,14 +61,17 @@ Citizen.CreateThread(function()
         local ped = PlayerPedId()
         local pedCoords = GetEntityCoords(ped)
         for k, v in pairs(currentAdminPlayers) do
-            local adminPed = GetPlayerPed(GetPlayerFromServerId(v.source))
-            local adminCoords = GetEntityCoords(adminPed)
+            local sqzPed = GetPlayerFromServerId(v.source)
+            if sqzPed ~= -1 then
+                local adminPed = GetPlayerPed(sqzPed)
+                local adminCoords = GetEntityCoords(adminPed)
 
-            local distance = #(adminCoords-pedCoords)
-            if distance < (Config.SeeDistance) then
-                visibleAdmins[v.source] = v
-            else
-                visibleAdmins[v.source] = nil
+                local distance = #(adminCoords-pedCoords)
+                if distance < (Config.SeeDistance) then
+                    visibleAdmins[v.source] = v
+                else
+                    visibleAdmins[v.source] = nil
+                end
             end
         end
     end
