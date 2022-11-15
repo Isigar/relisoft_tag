@@ -81,7 +81,7 @@ CreateThread(function()
     local wtt = 500
     while true do
         Wait(wtt)
-        if not next(visibleAdmins) == nil then
+        if next(visibleAdmins) ~= nil then
             for k, v in pairs(visibleAdmins) do
                 local playerServerID = GetPlayerFromServerId(v.source)
                 if playerServerID ~= -1 then
