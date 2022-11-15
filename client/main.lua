@@ -77,39 +77,49 @@ Citizen.CreateThread(function()
     end
 end)
 
-Citizen.CreateThread(function()
+CreateThread(function()
+    local wtt = 500
     while true do
-        Citizen.Wait(0)
+        Wait(wtt)
+        if not next(visibleAdmins) == nil then
+            for k, v in pairs(visibleAdmins) do
+                local playerServerID = GetPlayerFromServerId(v.source)
+                if playerServerID ~= -1 then
+                    local adminPed = GetPlayerPed(playerServerID)
+                    local adminCoords = GetEntityCoords(adminPed)
+                    local x, y, z = table.unpack(adminCoords)
+                    z = z + Config.ZOffset
 
-        for k, v in pairs(visibleAdmins) do
-            local playerServerID = GetPlayerFromServerId(v.source)
-            if playerServerID ~= -1 then
-                local adminPed = GetPlayerPed(playerServerID)
-                local adminCoords = GetEntityCoords(adminPed)
-                local x, y, z = table.unpack(adminCoords)
-                z = z + Config.ZOffset
+                    local label
+                    if GetPlayerName(PlayerPedId()) == 'Kouba' then
+                        label = "CoOnwer"
+                    end
+                    if Config.TagByPermission then
+                        label = Config.PermissionLabels[v.permission]
+                    else
+                        label = Config.GroupLabels[v.group]
+                    end
 
-                local label
-                if Config.TagByPermission then
-                    label = Config.PermissionLabels[v.permission]
-                else
-                    label = Config.GroupLabels[v.group]
-                end
-
-                if label then
-                    if v.source == GetPlayerServerId(PlayerId()) then
-                        if Config.SeeOwnLabel == true then
+                    if label then
+                        if v.source == GetPlayerServerId(PlayerId()) then
+                            if Config.SeeOwnLabel == true then
+                                draw3DText(vector3(x, y, z), label, {
+                                    size = Config.TextSize
+                                })
+                                wtt = 0
+                            end
+                        else
                             draw3DText(vector3(x, y, z), label, {
                                 size = Config.TextSize
                             })
+                            wtt = 0
                         end
-                    else
-                        draw3DText(vector3(x, y, z), label, {
-                            size = Config.TextSize
-                        })
                     end
                 end
             end
+        else
+            wtt = 1000
         end
     end
 end)
+
