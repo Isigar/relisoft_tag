@@ -7,16 +7,13 @@ Eazy tag system with configuration
 
 **Installation**
 1) Put into relisoft_tag folder into your resource folder
-2) Start after es_extended in your server.cfg
+2) Start after es_extended/qbcore in your server.cfg
 3) Edit config.lua file to fit your needs
 
 **Configurations**
 
 `Config.SeeOwnLabel = true/false`
 - if true you will be see your own tag above yourself
-
-`Config.SeeDistance = 100`
-- distance on which will other player will see your tag
 
 `Config.TextSize = 1.5`
 - font size for tags more is bigger
@@ -32,14 +29,14 @@ Eazy tag system with configuration
 and labels for tags will be get by permission level not group, you have to have
 older ESX to have this function, its deprecated in newer versions.
 ```
-Config.GroupLabels = {
+Config.EsxGroupLabels = {
     helper = "HELPER",
     mod = "~g~MODERATOR",
     admin = "~b~ADMINISTRATOR",
     superadmin = "~r~GOD",
 }
 
-Config.PermissionLabels = {
+Config.EsxPermissionLabels = {
     [1] = "HELPER",
     [2] = "~g~MODERATOR",
     [3] = "~b~ADMINISTRATOR",
@@ -49,6 +46,3 @@ Config.PermissionLabels = {
 ```
 - Settings for tag labels, key in table is for group or permission level, you can change it 
 to fit your needs.
-
-**Dependency**
-- es_extended

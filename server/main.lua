@@ -1,30 +1,53 @@
--- rcore.cz
--- Some-RP.cz
--- forum.some-rp.cz
+-- store.rcore.cz
+SharedObject = nil
 
-ESX = nil
+if Config.Framework == Framework.ESX then
+    SharedObject = GetEsxObject()
+end
+
+if Config.Framework == Framework.QBCORE then
+    SharedObject = GetQBCoreObject()
+
+    for k, v in pairs(SharedObject.Config.Server.Permissions) do
+        ExecuteCommand(("add_ace qbcore.%s tag.%s allow"):format(v, v))
+    end
+end
+
 AdminPlayers = {}
 
-TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+RegisterCommand('tag', function(source, args)
 
-RegisterCommand('tag', function(source,args)
-    local xPlayer = ESX.GetPlayerFromId(source)
+
     if AdminPlayers[source] == nil then
-        if Config.TagByPermission then
-            AdminPlayers[source] = {source = source, permission = xPlayer.getPermissions()}
-        else
-            AdminPlayers[source] = {source = source, group = xPlayer.getGroup()}
+        if Config.Framework == Framework.ESX then
+            local xPlayer = SharedObject.GetPlayerFromId(source)
+            if xPlayer.getPermissions then
+                AdminPlayers[source] = { source = source, permission = xPlayer.getPermissions() }
+            end
+            if xPlayer.getGroup then
+                AdminPlayers[source] = { source = source, group = xPlayer.getGroup() }
+            end
         end
 
-        TriggerClientEvent('chat:addMessage',source, { args = { 'Tag', 'Právě jste si zapl tag' }, color = { 255, 50, 50 } })
+        if Config.Framework == Framework.QBCORE then
+            for k, v in pairs(SharedObject.Config.Server.Permissions) do
+                if IsPlayerAceAllowed(source, "tag." .. v) then
+                    AdminPlayers[source] = { source = source, qbcore = v }
+                    break
+                end
+            end
+        end
+
+        TriggerClientEvent('chat:addMessage', source, { args = { 'Tag', _U("tag_on") }, color = { 255, 50, 50 } })
     else
         AdminPlayers[source] = nil
-        TriggerClientEvent('chat:addMessage',source, { args = { 'Tag', 'Právě jste si vypnul tag' }, color = { 255, 50, 50 } })
+        TriggerClientEvent('chat:addMessage', source, { args = { 'Tag', _U("tag_off") }, color = { 255, 50, 50 } })
     end
-    TriggerClientEvent('relisoft_tag:set_admins',-1,AdminPlayers)
+
+    TriggerClientEvent('relisoft_tag:set_admins', -1, AdminPlayers)
 end)
 
-ESX.RegisterServerCallback('relisoft_tag:getAdminsPlayers',function(source,cb)
+registerCallback('getAdminsPlayers', function(source, cb)
     cb(AdminPlayers)
 end)
 
@@ -32,5 +55,5 @@ AddEventHandler('esx:playerDropped', function(source)
     if AdminPlayers[source] ~= nil then
         AdminPlayers[source] = nil
     end
-    TriggerClientEvent('relisoft_tag:set_admins',-1,AdminPlayers)
+    TriggerClientEvent('relisoft_tag:set_admins', -1, AdminPlayers)
 end)

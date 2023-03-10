@@ -2,11 +2,18 @@ fx_version 'adamant'
 games {'common'}
 
 client_scripts {
-    'config/config.lua',
-    'client/main.lua'
+    'utils/client/callback.lua',
+    'client/main.lua',
 }
 
 server_scripts {
-    'config/config.lua',
-    'server/main.lua'
+    'utils/server/callback.lua',
+    'server/main.lua',
+}
+
+shared_scripts {
+    'utils/const.lua',
+    'config.lua',
+    'utils/shared.lua',
+    'locales/*.lua',
 }
