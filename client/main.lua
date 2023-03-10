@@ -47,7 +47,7 @@ end
 
 Citizen.CreateThread(function()
     while true do
-        Wait(500)
+        Wait(Config.NearCheckWait)
         local ped = PlayerPedId()
         local pedCoords = GetEntityCoords(ped)
         for k, v in pairs(currentAdminPlayers) do
