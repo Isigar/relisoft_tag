@@ -77,12 +77,12 @@ CreateThread(function()
                 local adminPed = GetPlayerPed(playerServerID)
                 local label
 
-                if v.group then
-                    label = Config.GroupLabels.ESX[1][v.group]
+                if v.permission then
+                    label = Config.GroupLabels.ESX[1][v.permission]
                 end
 
-                if v.permission then
-                    label = Config.GroupLabels.ESX[2][v.permission]
+                if v.group then
+                    label = Config.GroupLabels.ESX[2][v.group]
                 end
 
                 if v.qbcore then

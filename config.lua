@@ -23,7 +23,7 @@ Config.GroupLabels = {
             [5] = "~r~GOD",
         },
         -- group system that works on name
-        [1] = {
+        [2] = {
             helper = "HELPER",
             mod = "~g~MODERATOR",
             admin = "~b~ADMINISTRATOR",
