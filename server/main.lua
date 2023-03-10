@@ -16,8 +16,6 @@ end
 AdminPlayers = {}
 
 RegisterCommand('tag', function(source, args)
-
-
     if AdminPlayers[source] == nil then
         if Config.Framework == Framework.ESX then
             local xPlayer = SharedObject.GetPlayerFromId(source)
