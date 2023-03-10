@@ -24,24 +24,36 @@ Eazy tag system with configuration
 `Config.NearCheckWait = 500`
 - miliseconds to check if player is near any admin
 
-`Config.TagByPermission = true`
-- with this option tag system will use xPlayer.getPermission() function
-and labels for tags will be get by permission level not group, you have to have
-older ESX to have this function, its deprecated in newer versions.
-```
-Config.EsxGroupLabels = {
-    helper = "HELPER",
-    mod = "~g~MODERATOR",
-    admin = "~b~ADMINISTRATOR",
-    superadmin = "~r~GOD",
-}
 
-Config.EsxPermissionLabels = {
-    [1] = "HELPER",
-    [2] = "~g~MODERATOR",
-    [3] = "~b~ADMINISTRATOR",
-    [4] = "~r~GOD",
-    [5] = "~r~GOD",
+- You can change your labels for admin groups in here
+```
+Config.GroupLabels = {
+    ESX = {
+        -- group system that used to work on numbers only
+        [1] = {
+            [1] = "HELPER",
+            [2] = "~g~MODERATOR",
+            [3] = "~b~ADMINISTRATOR",
+            [4] = "~r~GOD",
+            [5] = "~r~GOD",
+        },
+        -- group system that works on name
+        [1] = {
+            helper = "HELPER",
+            mod = "~g~MODERATOR",
+            admin = "~b~ADMINISTRATOR",
+            superadmin = "~r~GOD",
+        },
+    },
+
+    QBCore = {
+        -- group system that works on ACE
+        [1] = {
+            god = "~r~GOD",
+            admin = "~b~ADMINISTRATOR",
+            mod = "~g~MODERATOR",
+        },
+    }
 }
 ```
 - Settings for tag labels, key in table is for group or permission level, you can change it 
