@@ -1,17 +1,8 @@
--- relisoft.cz
--- Some-RP.cz
--- forum.some-rp.cz
+-- store.rcore.cz
 
-ESX = nil
 local currentAdminPlayers = {}
 local visibleAdmins = {}
-
-Citizen.CreateThread(function()
-    while ESX == nil do
-        TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
-        Citizen.Wait(0)
-    end
-end)
+local closeAdmins = {}
 
 RegisterNetEvent('relisoft_tag:set_admins')
 AddEventHandler('relisoft_tag:set_admins', function(admins)
@@ -23,9 +14,8 @@ AddEventHandler('relisoft_tag:set_admins', function(admins)
     end
 end)
 
-RegisterNetEvent('esx:playerLoaded')
-AddEventHandler('esx:playerLoaded', function()
-    ESX.TriggerServerCallback('relisoft_tag:getAdminsPlayers', function(admins)
+CreateThread(function()
+    callCallback('getAdminsPlayers', function(admins)
         currentAdminPlayers = admins
     end)
 end)
@@ -36,7 +26,7 @@ function draw3DText(pos, text, options)
     local scaleOption = options.size or 0.8
 
     local camCoords = GetGameplayCamCoords()
-    local dist = #(vector3(camCoords.x, camCoords.y, camCoords.z) - vector3(pos.x, pos.y, pos.z))
+    local dist = #(camCoords - pos)
     local scale = (scaleOption / dist) * 2
     local fov = (1 / GetGameplayCamFov()) * 100
     local scaleMultiplier = scale * fov
@@ -57,7 +47,7 @@ end
 
 Citizen.CreateThread(function()
     while true do
-        Citizen.Wait(Config.NearCheckWait)
+        Wait(Config.NearCheckWait)
         local ped = PlayerPedId()
         local pedCoords = GetEntityCoords(ped)
         for k, v in pairs(currentAdminPlayers) do
@@ -67,7 +57,7 @@ Citizen.CreateThread(function()
                 local adminCoords = GetEntityCoords(adminPed)
 
                 local distance = #(adminCoords - pedCoords)
-                if distance < (Config.SeeDistance) then
+                if distance < 40 then
                     visibleAdmins[v.source] = v
                 else
                     visibleAdmins[v.source] = nil
@@ -78,47 +68,62 @@ Citizen.CreateThread(function()
 end)
 
 CreateThread(function()
-    local wtt = 500
     while true do
-        Wait(wtt)
-        if next(visibleAdmins) ~= nil then
-            for k, v in pairs(visibleAdmins) do
-                local playerServerID = GetPlayerFromServerId(v.source)
-                if playerServerID ~= -1 then
-                    local adminPed = GetPlayerPed(playerServerID)
-                    local adminCoords = GetEntityCoords(adminPed)
-                    local x, y, z = table.unpack(adminCoords)
-                    z = z + Config.ZOffset
+        Wait(500)
+        closeAdmins = {}
+        for k, v in pairs(visibleAdmins) do
+            local playerServerID = GetPlayerFromServerId(v.source)
+            if playerServerID ~= -1 then
+                local adminPed = GetPlayerPed(playerServerID)
+                local label
 
-                    local label
-                    if GetPlayerName(PlayerPedId()) == 'Kouba' then
-                        label = "CoOnwer"
-                    end
-                    if Config.TagByPermission then
-                        label = Config.PermissionLabels[v.permission]
-                    else
-                        label = Config.GroupLabels[v.group]
-                    end
+                if v.permission then
+                    label = Config.GroupLabels.ESX[1][v.permission]
+                end
 
-                    if label then
-                        if v.source == GetPlayerServerId(PlayerId()) then
-                            if Config.SeeOwnLabel == true then
-                                draw3DText(vector3(x, y, z), label, {
-                                    size = Config.TextSize
-                                })
-                                wtt = 0
-                            end
-                        else
-                            draw3DText(vector3(x, y, z), label, {
+                if v.group then
+                    label = Config.GroupLabels.ESX[2][v.group]
+                end
+
+                if v.qbcore then
+                    label = Config.GroupLabels.QBCore[1][v.qbcore]
+                end
+
+
+                if label then
+                    closeAdmins[playerServerID] = {
+                        ped = adminPed,
+                        label = label,
+                        source = v.source,
+                        self = v.source == GetPlayerServerId(PlayerId()),
+                    }
+                end
+            end
+        end
+    end
+end)
+
+CreateThread(function()
+    while true do
+        Wait(0)
+        if next(closeAdmins) ~= nil then
+            for k, v in pairs(closeAdmins) do
+                if v.label then
+                    if v.self then
+                        if Config.SeeOwnLabel == true then
+                            draw3DText(GetEntityCoords(v.ped) + Config.Offset, v.label, {
                                 size = Config.TextSize
                             })
-                            wtt = 0
                         end
+                    else
+                        draw3DText(GetEntityCoords(v.ped) + Config.Offset, v.label, {
+                            size = Config.TextSize
+                        })
                     end
                 end
             end
         else
-            wtt = 1000
+            Wait(1000)
         end
     end
 end)
