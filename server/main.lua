@@ -8,8 +8,10 @@ end
 if Config.Framework == Framework.QBCORE then
     SharedObject = GetQBCoreObject()
 
+    -- older version of qbcore is running with group name "qbcore" and not "group" this will support both.
     for k, v in pairs(SharedObject.Config.Server.Permissions) do
         ExecuteCommand(("add_ace qbcore.%s tag.%s allow"):format(v, v))
+        ExecuteCommand(("add_ace group.%s tag.%s allow"):format(v, v))
     end
 end
 
