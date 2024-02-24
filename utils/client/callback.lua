@@ -8,7 +8,7 @@ local currentRequest = 0
 
 function callCallback(name, cb, ...)
     clientCallbacks[currentRequest] = cb
-    TriggerServerEvent('rcore_tag:callCallback', name, currentRequest, GetPlayerServerId(PlayerId()), ...)
+    TriggerServerEvent('rcore_tag:callCallback', name, currentRequest, ...)
 
     if currentRequest < 65535 then
         currentRequest = currentRequest + 1

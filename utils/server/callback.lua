@@ -8,7 +8,8 @@ function registerCallback(cbName, callback)
     serverCallbacks[cbName] = callback
 end
 
-RegisterNetEvent('rcore_tag:callCallback', function(name, requestId, source, ...)
+RegisterNetEvent('rcore_tag:callCallback', function(name, requestId, ...)
+    local source = source
     if serverCallbacks[name] == nil then
         return
     end
