@@ -7,7 +7,7 @@ Config.Framework = Framework.ESX
 Config.Locale = "en"
 
 Config.SeeOwnLabel = true
-
+Config.UseNames = false
 Config.TextSize = 0.8
 Config.Offset = vector3(0, 0, 1.2)
 Config.NearCheckWait = 500

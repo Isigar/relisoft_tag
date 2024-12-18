@@ -22,17 +22,18 @@ RegisterCommand('tag', function(source, args)
         if Config.Framework == Framework.ESX then
             local xPlayer = SharedObject.GetPlayerFromId(source)
             if xPlayer.getPermissions then
-                AdminPlayers[source] = { source = source, permission = xPlayer.getPermissions() }
+                AdminPlayers[source] = { source = source, permission = xPlayer.getPermissions(), name = xPlayer.getName() or "UNK" }
             end
             if xPlayer.getGroup then
-                AdminPlayers[source] = { source = source, group = xPlayer.getGroup() }
+                AdminPlayers[source] = { source = source, group = xPlayer.getGroup(), name = xPlayer.getName() or "UNK" }
             end
         end
 
         if Config.Framework == Framework.QBCORE then
+            local qbPlayer = SharedObject.Functions.GetPlayer(source)
             for k, v in pairs(SharedObject.Config.Server.Permissions) do
                 if IsPlayerAceAllowed(source, "tag." .. v) then
-                    AdminPlayers[source] = { source = source, qbcore = v }
+                    AdminPlayers[source] = { source = source, qbcore = v, name = qbPlayer.name or "UNK" }
                     break
                 end
             end

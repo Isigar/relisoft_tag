@@ -89,6 +89,9 @@ CreateThread(function()
                     label = Config.GroupLabels.QBCore[1][v.qbcore]
                 end
 
+                if Config.UseNames then
+                    label = string.format("%s | %s", label, v.name)
+                end
 
                 if label then
                     closeAdmins[playerServerID] = {
@@ -96,6 +99,7 @@ CreateThread(function()
                         label = label,
                         source = v.source,
                         self = v.source == GetPlayerServerId(PlayerId()),
+                        name = v.name,
                     }
                 end
             end
