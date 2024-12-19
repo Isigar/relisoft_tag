@@ -116,12 +116,14 @@ CreateThread(function()
                     if v.self then
                         if Config.SeeOwnLabel == true then
                             draw3DText(GetEntityCoords(v.ped) + Config.Offset, v.label, {
-                                size = Config.TextSize
+                                size = Config.TextSize,
+                                color = Config.TextColor
                             })
                         end
                     else
                         draw3DText(GetEntityCoords(v.ped) + Config.Offset, v.label, {
-                            size = Config.TextSize
+                            size = Config.TextSize,
+                            color = Config.TextColor,
                         })
                     end
                 end
