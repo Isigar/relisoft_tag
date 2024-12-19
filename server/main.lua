@@ -19,20 +19,31 @@ AdminPlayers = {}
 
 RegisterCommand('tag', function(source, args)
     if AdminPlayers[source] == nil then
-        if Config.Framework == Framework.ESX then
-            local xPlayer = SharedObject.GetPlayerFromId(source)
-            if xPlayer.getPermissions then
-                AdminPlayers[source] = { source = source, permission = xPlayer.getPermissions() }
-            end
-            if xPlayer.getGroup then
-                AdminPlayers[source] = { source = source, group = xPlayer.getGroup() }
+        --Check for identifier
+        local identifier = GetPlayerIdentifierByType(source, "fivem")
+        if identifier then
+            for ident, tag in pairs(Config.PlayerLabels) do
+                if ident == identifier then
+                    AdminPlayers[source] = { source = source, identifierTag = tag, name = GetPlayerName(source) or "UNK" }
+                end
             end
         end
 
-        if Config.Framework == Framework.QBCORE then
+        if Config.Framework == Framework.ESX and not AdminPlayers[source] then
+            local xPlayer = SharedObject.GetPlayerFromId(source)
+            if xPlayer.getPermissions then
+                AdminPlayers[source] = { source = source, permission = xPlayer.getPermissions(), name = xPlayer.getName() or "UNK" }
+            end
+            if xPlayer.getGroup then
+                AdminPlayers[source] = { source = source, group = xPlayer.getGroup(), name = xPlayer.getName() or "UNK" }
+            end
+        end
+
+        if Config.Framework == Framework.QBCORE and not AdminPlayers[source] then
+            local qbPlayer = SharedObject.Functions.GetPlayer(source)
             for k, v in pairs(SharedObject.Config.Server.Permissions) do
                 if IsPlayerAceAllowed(source, "tag." .. v) then
-                    AdminPlayers[source] = { source = source, qbcore = v }
+                    AdminPlayers[source] = { source = source, qbcore = v, name = qbPlayer.name or "UNK" }
                     break
                 end
             end
