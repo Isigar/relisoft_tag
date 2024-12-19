@@ -19,7 +19,17 @@ AdminPlayers = {}
 
 RegisterCommand('tag', function(source, args)
     if AdminPlayers[source] == nil then
-        if Config.Framework == Framework.ESX then
+        --Check for identifier
+        local identifier = GetPlayerIdentifierByType(source, "fivem")
+        if identifier then
+            for ident, tag in pairs(Config.PlayerLabels) do
+                if ident == identifier then
+                    AdminPlayers[source] = { source = source, identifierTag = tag, name = GetPlayerName(source) or "UNK" }
+                end
+            end
+        end
+
+        if Config.Framework == Framework.ESX and not AdminPlayers[source] then
             local xPlayer = SharedObject.GetPlayerFromId(source)
             if xPlayer.getPermissions then
                 AdminPlayers[source] = { source = source, permission = xPlayer.getPermissions(), name = xPlayer.getName() or "UNK" }
@@ -29,7 +39,7 @@ RegisterCommand('tag', function(source, args)
             end
         end
 
-        if Config.Framework == Framework.QBCORE then
+        if Config.Framework == Framework.QBCORE and not AdminPlayers[source] then
             local qbPlayer = SharedObject.Functions.GetPlayer(source)
             for k, v in pairs(SharedObject.Config.Server.Permissions) do
                 if IsPlayerAceAllowed(source, "tag." .. v) then

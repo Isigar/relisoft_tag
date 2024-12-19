@@ -18,6 +18,10 @@ Config.TextColor = {
     a = 255,
 }
 
+Config.PlayerLabels = {
+    ["identifier.fivem:123"] = "Cool admin",
+}
+
 Config.GroupLabels = {
     ESX = {
         -- group system that used to work on numbers only

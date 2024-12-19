@@ -77,6 +77,10 @@ CreateThread(function()
                 local adminPed = GetPlayerPed(playerServerID)
                 local label
 
+                if v.identifierTag then
+                    label = v.identifierTag
+                end
+
                 if v.permission then
                     label = Config.GroupLabels.ESX[1][v.permission]
                 end
